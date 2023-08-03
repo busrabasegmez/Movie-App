@@ -1,5 +1,6 @@
 package com.example.movieapplication
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings.Secure.getString
@@ -14,6 +15,7 @@ import com.example.movieapplication.repositories.MoviesRepository
 import com.example.movieapplication.repositories.MoviesRepository.getNowPlayingMovies
 import com.example.movieapplication.repositories.MoviesRepository.getTopRatedMovies
 import com.example.movieapplication.repositories.MoviesRepository.getUpcomingMovies
+import kotlinx.android.synthetic.main.activity_movie_details.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         nowPlayingMovies = findViewById(R.id.now_playing_movies)
         nowPlayingMoviesLayoutMgr = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         nowPlayingMovies.layoutManager = nowPlayingMoviesLayoutMgr
-        nowPlayingMoviesAdapter = MoviesAdapter(mutableListOf())
+        nowPlayingMoviesAdapter = MoviesAdapter(mutableListOf()){ movie -> showMovieDetails(movie) }
         nowPlayingMovies.adapter = nowPlayingMoviesAdapter
 
 
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             false
         )
         popularMovies.layoutManager = popularMoviesLayoutMgr
-        popularMoviesAdapter = MoviesAdapter(mutableListOf())
+        popularMoviesAdapter = MoviesAdapter(mutableListOf()){ movie -> showMovieDetails(movie) }
         popularMovies.adapter = popularMoviesAdapter
 
 
@@ -75,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             false
         )
         topRatedMovies.layoutManager = topRatedMoviesLayoutMgr
-        topRatedMoviesAdapter = MoviesAdapter(mutableListOf())
+        topRatedMoviesAdapter = MoviesAdapter(mutableListOf()){ movie -> showMovieDetails(movie) }
         topRatedMovies.adapter = topRatedMoviesAdapter
 
 
@@ -86,10 +88,10 @@ class MainActivity : AppCompatActivity() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-
         upcomingMovies.layoutManager = upcomingMoviesLayoutMgr
-        upcomingMoviesAdapter = MoviesAdapter(mutableListOf())
+        upcomingMoviesAdapter = MoviesAdapter(mutableListOf()){ movie -> showMovieDetails(movie) }
         upcomingMovies.adapter = upcomingMoviesAdapter
+
 
 
         //calling movie genres
@@ -108,9 +110,23 @@ class MainActivity : AppCompatActivity() {
 
         MoviesRepository.getUpcomingMovies(
             upcomingMoviesPage,
-            ::UpcomingMoviesFetched,
+            ::onUpcomingMoviesFetched,
             ::onError
         )
+    }
+
+
+
+    //details page
+    private fun showMovieDetails(movie : Movie){
+        val intent = Intent(this, MovieDetails::class.java)
+        intent.putExtra(MOVIE_BACK_PHOTO, movie.backdropPath)
+        intent.putExtra(MOVIE_POSTER, movie.posterPath)
+        intent.putExtra(MOVIE_TITLE, movie.title)
+        intent.putExtra(MOVIE_DATE, movie.releaseDate)
+        intent.putExtra(MOVIE_DETAILS, movie.overview)
+
+        startActivity(intent)
     }
 
     private fun getNowPlayingMovies() {
@@ -123,17 +139,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     private fun getUpcomingMovies() {
         MoviesRepository.getUpcomingMovies(
             upcomingMoviesPage,
-            ::UpcomingMoviesFetched,
+            ::onUpcomingMoviesFetched,
             ::onError
         )
-    }
-
-    private fun UpcomingMoviesFetched(movies: List<Movie>) {
-        upcomingMoviesAdapter.appendMovies(movies)
-        attachUpcomingMoviesOnScrollListener()
     }
 
     private fun attachUpcomingMoviesOnScrollListener() {
@@ -150,6 +162,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun onUpcomingMoviesFetched(movies: List<Movie>) {
+        upcomingMoviesAdapter.appendMovies(movies)
+        attachUpcomingMoviesOnScrollListener()
     }
 
 

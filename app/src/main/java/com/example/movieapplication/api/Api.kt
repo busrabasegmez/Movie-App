@@ -31,11 +31,11 @@ interface Api {
     ): Call<GetMoviesResponse>
 
 
-        @GET("movie/upcoming")
-        fun getUpcomingMovies(
-            @Query("api_key") apiKey: String = "YOUR_API_KEY_HERE",
-            @Query("page") page: Int
-        ): Call<GetMoviesResponse>
+    @GET("movie/upcoming")
+    fun getUpcomingMovies(
+        @Query("api_key") apiKey: String = "4877fced511b935021ca3e77da2a4413",
+        @Query("page") page: Int
+    ): Call<GetMoviesResponse>
 
 }
 
