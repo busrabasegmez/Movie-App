@@ -73,6 +73,9 @@ dependencies {
     // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
 
+    //bottom nav bar
+    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
 
     //material desging
     implementation 'com.google.android.material:material:1.9.0'

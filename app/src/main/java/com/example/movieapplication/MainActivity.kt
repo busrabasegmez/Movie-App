@@ -15,9 +15,13 @@ import com.example.movieapplication.repositories.MoviesRepository
 import com.example.movieapplication.repositories.MoviesRepository.getNowPlayingMovies
 import com.example.movieapplication.repositories.MoviesRepository.getTopRatedMovies
 import com.example.movieapplication.repositories.MoviesRepository.getUpcomingMovies
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_movie_details.*
 
 class MainActivity : AppCompatActivity() {
+
+    //bottom nav bar
+
 
     //now playing
     private lateinit var nowPlayingMovies: RecyclerView
@@ -49,6 +53,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.movieIcon -> {
+                    // Handle the click on the "Home" item
+                    // Add your logic here (if any)
+                    // For example, do nothing or show a Toast message
+                    Toast.makeText(this, "Clicked Home", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.TVSeriesIcon -> {
+                    // Handle the click on the "TV Series" item
+                    // Start the TvSeriesActivity
+                    val intent = Intent(this, TvSeriesActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                // Add more cases for other menu items if needed
+                else -> false
+            }
+        }
         //now playing movies
         nowPlayingMovies = findViewById(R.id.now_playing_movies)
         nowPlayingMoviesLayoutMgr = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -125,6 +150,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(MOVIE_TITLE, movie.title)
         intent.putExtra(MOVIE_DATE, movie.releaseDate)
         intent.putExtra(MOVIE_DETAILS, movie.overview)
+        intent.putExtra(MOVIE_RATING,movie.rating)
 
         startActivity(intent)
     }

@@ -14,6 +14,7 @@ const val MOVIE_POSTER = "extra_movie_poster"
 const val MOVIE_TITLE = "extra_movie_title"
 const val MOVIE_DATE = "extra_movie_date"
 const val MOVIE_DETAILS = "extra_movie_details"
+const val MOVIE_RATING = "extras_movie_rating"
 
 class MovieDetails : AppCompatActivity() {
 
@@ -22,6 +23,7 @@ class MovieDetails : AppCompatActivity() {
     private lateinit var movieTitle: TextView
     private lateinit var movieDetails: TextView
     private lateinit var releasedDate: TextView
+    private lateinit var imdbRating : TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,7 @@ class MovieDetails : AppCompatActivity() {
         movieTitle = findViewById(R.id.movieTitle)
         movieDetails = findViewById(R.id.movieDetailsTText)
         releasedDate = findViewById(R.id.date)
+        imdbRating = findViewById(R.id.imdbRating)
 
 
         val extras = intent.extras
@@ -63,7 +66,7 @@ class MovieDetails : AppCompatActivity() {
         movieTitle.text = extras.getString(MOVIE_TITLE, "")
         releasedDate.text = extras.getString(MOVIE_DATE, "")
         movieDetails.text = extras.getString(MOVIE_DETAILS, "")
-
+        imdbRating.text= extras.getFloat(MOVIE_RATING).toString()
 
     }
 }
